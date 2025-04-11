@@ -18,12 +18,12 @@ package pick_doll;
 public class User {
     private final int X_SIZE = 1;
     private final int Y_SIZE = 10;
-
-    private final int[][] dollRepo = new int[X_SIZE][Y_SIZE];
+    private static User instance;
+    private int[][] dollRepo = new int[X_SIZE][Y_SIZE];
 
     private int score = 0;
 
-    private int repoY = Y_SIZE;
+    private int repoY = Y_SIZE - 1;
 
     public int[][] getDollRepo() {
         return dollRepo;
@@ -35,6 +35,14 @@ public class User {
 
     public void increaseScore() {
         this.score += 1;
+    }
+
+    public static  User getInstance() {
+        if (instance == null) {
+            instance = new User();
+            return instance;
+        }
+        return instance;
     }
 
     // if max repository not correct thing than game over
@@ -63,45 +71,49 @@ public class User {
     }
 
     public void checkMyRepo() {
-        int repoY = Y_SIZE - 1;
-        while (repoY > 0) {
-            if (repoY - 1 > 0) {
-                if (dollRepo[0][repoY] == dollRepo[0][repoY - 1]) {
-                    dollRepo[0][repoY] = 0;
-                    dollRepo[0][repoY - 1] = 0;
-                    resetMyRepo(repoY, repoY - 1);
+        int currentVal = Y_SIZE - 1;
+        int nextVal = currentVal - 1;
+
+        while (true) {
+            if (dollRepo[0][currentVal] != 0 &&  dollRepo[0][nextVal] != 0) {
+                if (dollRepo[0][currentVal] == dollRepo[0][nextVal]) {
+                    dollRepo[0][currentVal] = 0;
+                    dollRepo[0][nextVal] = 0;
                     increaseScore();
+                    System.out.println("같은 인형 두개 히트!! 1점 추가!");
                 }
             }
-            repoY -= 1;
+
+            currentVal -= 1;
+            nextVal -= 1;
+
+            if (nextVal <= 0) {
+                break;
+            }
         }
+
+        resetMyRepo();
     }
 
-    public void resetMyRepo(int currentY, int nextY) {
-        if (nextY == 0) {
-            return;
+    public void resetMyRepo() {
+        int[][] temp = new int[1][Y_SIZE];
+        int cnt = Y_SIZE - 1;
+
+        for (int i = Y_SIZE - 1; i >= 0; i--) {
+            if (dollRepo[0][i] != 0) {
+                temp[0][cnt] = dollRepo[0][i];
+                cnt -= 1;
+            }
         }
 
-        int swapCv = nextY - 1;
-        int swapNv = nextY - 2;
+        dollRepo = temp;
+    }
 
-        if (swapCv > 0 && swapNv >= 0) {
-            while (true) {
-                // 현재 자리에 이전 값 넣고
-                dollRepo[0][currentY] = dollRepo[0][swapCv];
-                dollRepo[0][nextY] = dollRepo[0][swapNv];
-
-                // 현재 인덱스를 이전으로 초기화
-                currentY = swapCv;
-                nextY = swapNv;
-
-                // 윗칸으로 이동
-                swapCv -= 1;
-                swapNv -= 1;
-
-                if (swapNv == 0) {
-                    return;
-                }
+    public void printMyRepo() {
+        System.out.println("현재 사용자의 인형 저장소입니다!");
+        for (int i = 0; i < dollRepo.length; i++) {
+            for (int j = 0; j < dollRepo[i].length; j++) {
+                System.out.println(dollRepo[i][j]);
             }
         }
     }
