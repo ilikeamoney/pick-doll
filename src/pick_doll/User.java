@@ -117,4 +117,8 @@ public class User {
             }
         }
     }
+
+    public int[][] getRepo() {
+        return dollRepo;
+    }
 }

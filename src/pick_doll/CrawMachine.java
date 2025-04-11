@@ -119,10 +119,6 @@ public class CrawMachine implements Machine {
         }
     }
 
-    private int[][] getField() {
-        return field;
-    }
-
     private void printField() {
         System.out.println("뽑을 위치를 고르세요 ! (0 ~ 9)");
         System.out.println("0  1  2  3  4  5  6  7  8  9");
@@ -133,5 +129,9 @@ public class CrawMachine implements Machine {
             }
             System.out.println();
         }
+    }
+
+    public int[][] getField() {
+        return field;
     }
 }
