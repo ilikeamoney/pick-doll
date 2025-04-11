@@ -25,10 +25,6 @@ public class User {
 
     private int repoY = Y_SIZE - 1;
 
-    public int[][] getDollRepo() {
-        return dollRepo;
-    }
-
     public int getScore() {
         return score;
     }
@@ -116,6 +112,18 @@ public class User {
                 System.out.println(dollRepo[i][j]);
             }
         }
+    }
+
+    public int getMyDollCnt() {
+        int cnt = 0;
+
+        for (int i = 0; i < dollRepo[0].length; i++) {
+            if (dollRepo[0][i] != 0) {
+                cnt += 1;
+            }
+        }
+
+        return cnt;
     }
 
     public int[][] getRepo() {

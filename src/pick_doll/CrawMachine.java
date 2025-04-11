@@ -4,7 +4,6 @@ import java.util.Random;
 import java.util.Scanner;
 
 public class CrawMachine implements Machine {
-
     private final int X_SIZE = 10;
     private final int Y_SIZE = 10;
     private final int[][] field = new int[X_SIZE][Y_SIZE];
@@ -25,10 +24,16 @@ public class CrawMachine implements Machine {
             System.out.println("인형 뽑기를 시작합니다 종료 = 0, 시작 = 1");
             int userChoice = sc.nextInt();
 
-            if (userChoice == 1) {
+            if (userChoice == GameStatus.START.getValue()) {
                 printField();
                 int userPick = sc.nextInt();
                 pickDoll(user, userPick);
+
+                if (user.getMyDollCnt() > GameStatus.GAME_OVER.getValue()) {
+                    System.out.println("바구니 초과! 게임 종료!");
+                    user.printMyRepo();
+                    return;
+                }
 
                 user.printMyRepo();
             } else {
@@ -52,9 +57,10 @@ public class CrawMachine implements Machine {
 
         // now craw start
         while (true) {
-            int doll = field[fpy][userPick];
+            int pick = field[fpy][userPick];
 
-            if (doll != 0) {
+            // lucky
+            if (pick != GameStatus.SPACE.getValue()) {
                 boolean l = luckyPoint();
 
                 if (!l) {
@@ -63,7 +69,7 @@ public class CrawMachine implements Machine {
                 }
 
                 System.out.println("인형이 뽑혔습니다! 사용자 Repo에 인형을 추가합니다!");
-                boolean c = user.addDollMyRepo(doll);
+                boolean c = user.addDollMyRepo(pick);
                 field[fpy][userPick] = 0;
 
                 if (!c) {
