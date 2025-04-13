@@ -14,7 +14,7 @@ public class CrawMachine implements Machine {
 
     @Override
     public void init() {
-        setDolls();
+        setDollsStack();
     }
 
     @Override
@@ -104,7 +104,7 @@ public class CrawMachine implements Machine {
         return true;
     }
 
-    private void setDolls() {
+    private void setDollsRandom() {
         int setCnt = 50;
 
         while (setCnt > 0) {
@@ -122,6 +122,22 @@ public class CrawMachine implements Machine {
             }
 
             setCnt -= 1;
+        }
+    }
+
+    private void setDollsStack() {
+        for (int i = 0; i < field.length; i++) {
+            int stackR = r.nextInt(field[i].length);
+
+            // 최소 쌓여야 하는 값 지정
+            if (stackR < 3) {
+                stackR = 4;
+            }
+
+            for (int j = field[i].length - 1; j >= stackR; j--) {
+                int doll = r.nextInt(dollType.length);
+                field[j][i] = dollType[doll];
+            }
         }
     }
 
